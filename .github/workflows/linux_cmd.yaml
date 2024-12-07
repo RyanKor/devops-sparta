@@ -15,10 +15,10 @@ jobs:
         run: ls -la
 
       - name: README 파일 내용 확인(cat)
-        run: cat README.md
+        run: cat Readme.md
 
       - name: 특정 단어 검색(grep)
-        run: grep 'GitHub' README.md || echo "해당 단어가 없습니다."
+        run: grep 'GitHub' Readme.md || echo "해당 단어가 없습니다."
 
       - name: 환경 변수 확인(env)
         run: env
