@@ -1,0 +1,18 @@
+name: Simple Python Print Workflow
+
+on: [push]
+
+jobs:
+  print-hello-world:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+    
+    - name: Run Python script
+      run: python 01-tutorial/hello_world.py
