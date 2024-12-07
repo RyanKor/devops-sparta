@@ -1,7 +1,8 @@
 name: CI Workflow
 on:
-  paths:
-    - '.github/workflows/hello_world.yaml'
+  push:
+    paths:
+      - '.github/workflows/hello_world.yaml'
 jobs:
   build:
     runs-on: ubuntu-latest

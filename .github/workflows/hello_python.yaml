@@ -1,8 +1,9 @@
 name: Simple Python Print Workflow
 
 on:
-  paths:
-    - '.github/workflows/hello_python.yaml'
+  push:
+    paths:
+      - '.github/workflows/hello_python.yaml'
 
 jobs:
   print-hello-world:
