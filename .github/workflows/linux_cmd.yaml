@@ -1,5 +1,7 @@
 name: Linux Command Practice
-on: [push]
+on:
+  paths:
+    - '.github/workflows/linux_cmd.yaml'
 
 jobs:
   run-commands:
