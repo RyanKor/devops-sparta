@@ -23,7 +23,7 @@ jobs:
 
       - name: Start FastAPI server in background
         run: |
-          nohup uvicorn 02-fastapi.main:app --host 0.0.0.0 --port 8000 &
+          uvicorn 02-fastapi.main:app
           # 백그라운드로 서버 실행
 
       - name: Curl check FastAPI response
