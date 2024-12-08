@@ -23,7 +23,7 @@ jobs:
 
       - name: Start FastAPI server in background
         run: |
-          uvicorn 02-fastapi.main:app
+          uvicorn 02-fastapi.main:app &
           # 백그라운드로 서버 실행
 
       - name: Curl check FastAPI response
