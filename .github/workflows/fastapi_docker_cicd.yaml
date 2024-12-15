@@ -31,6 +31,8 @@ jobs:
           push: false
           tags: ryankor/devops-sparta:fast-api-multi-stage-0.0.1
           load: true
+          cache-from: type=registry,ref=username/repo:cache
+          cache-to: type=registry,ref=username/repo:cache,mode=max
       # 여기서 로컬 컨테이너 실행 후 테스트
       - name: Run Container
         run: |
