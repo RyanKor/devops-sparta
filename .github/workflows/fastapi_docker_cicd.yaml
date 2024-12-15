@@ -30,7 +30,7 @@ jobs:
           file: ./Dockerfile
           push: false
           tags: ryankor/devops-sparta:fast-api-multi-stage-0.0.1
-
+          load: true
       # 여기서 로컬 컨테이너 실행 후 테스트
       - name: Run Container
         run: |
