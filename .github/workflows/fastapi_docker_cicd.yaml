@@ -41,14 +41,12 @@ jobs:
 
       - name: Test FastAPI Endpoint
         run: |
-          # curl을 통한 테스트
-          # 200 OK 응답이 올 경우 테스트 성공, 그렇지 않으면 Actions 실패 처리
-          STATUS_CODE=$(curl -s -o /dev/null -w "%{http_code}" http://127.0.0.1:8000)
-          if [ "$STATUS_CODE" -ne 200 ]; then
-            echo "FastAPI endpoint test failed with status code $STATUS_CODE"
+          RESULT=$(curl -s http://127.0.0.1:8000)
+          if echo "$RESULT" | grep -q '{"Hello": "Sparta"}'; then
+            echo "매칭되는 문자열이 발견되었습니다. 종료합니다."
             exit 1
           else
-            echo "FastAPI endpoint test succeeded with status code $STATUS_CODE"
+            echo "매칭되는 문자열이 없습니다. 계속 진행합니다."
           fi
 
       # 테스트 성공시 이미지 푸시(선택사항)
