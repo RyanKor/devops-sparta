@@ -1,0 +1,67 @@
+name: Docker CI/CD
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  test-build-run:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v3
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build image
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          file: ./Dockerfile
+          push: false
+          tags: ryankor/devops-sparta:fast-api-multi-stage-0.0.1
+
+      # 여기서 로컬 컨테이너 실행 후 테스트
+      - name: Run Container
+        run: |
+          # 백그라운드로 컨테이너 실행
+          docker run -d --name test-container -p 8000:8000 ryankor/devops-sparta:fast-api-multi-stage-0.0.1
+          # 컨테이너가 준비될 때까지 잠시 대기(예: 5초)
+          sleep 5
+
+      - name: Test FastAPI Endpoint
+        run: |
+          # curl을 통한 테스트
+          # 200 OK 응답이 올 경우 테스트 성공, 그렇지 않으면 Actions 실패 처리
+          STATUS_CODE=$(curl -s -o /dev/null -w "%{http_code}" http://127.0.0.1:8000)
+          if [ "$STATUS_CODE" -ne 200 ]; then
+            echo "FastAPI endpoint test failed with status code $STATUS_CODE"
+            exit 1
+          else
+            echo "FastAPI endpoint test succeeded with status code $STATUS_CODE"
+          fi
+
+      # 테스트 성공시 이미지 푸시(선택사항)
+      - name: Push image
+        if: success()
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: ryankor/devops-sparta:fast-api-multi-stage-0.0.1
+
+      - name: Clean up
+        run: |
+          docker stop test-container
+          docker rm test-container
