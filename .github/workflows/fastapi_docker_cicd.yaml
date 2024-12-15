@@ -42,11 +42,11 @@ jobs:
       - name: Test FastAPI Endpoint
         run: |
           RESULT=$(curl -s http://127.0.0.1:8000)
-          if echo "$RESULT" | grep '{"Hello": "Sparta"}'; then
-            echo "매칭되는 문자열이 발견되었습니다. 종료합니다."
-            exit 1
+          if echo "$RESULT" | grep '"Hello":"Sparta"'; then
+            echo "매칭되는 문자열이 발견되었습니다. 계속 진행합니다."
           else
-            echo "매칭되는 문자열이 없습니다. 계속 진행합니다."
+            echo "매칭되는 문자열이 없습니다. 종료합니다."
+            exit 1
           fi
 
       # 테스트 성공시 이미지 푸시(선택사항)
