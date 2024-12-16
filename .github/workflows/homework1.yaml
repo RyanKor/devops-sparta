@@ -12,7 +12,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
       
-      - name: Run CI only if "Test" is in the commit message
-        if: contains(github.event.head_commit.message, 'Test')
+      - name: Test Branch Action Runner
         run: |
-          echo "Running CI for commit containing 'Test'"
+          echo "Test Branch Action Runner"
