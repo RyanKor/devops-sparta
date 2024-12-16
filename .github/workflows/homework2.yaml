@@ -15,4 +15,4 @@ jobs:
       - name: Run CI only if "build" is in the commit message
         if: contains(github.event.head_commit.message, 'build')
         run: |
-          echo "Running CI for commit containing 'build'"
+          echo "Running CI for commit containing 'build'!"
