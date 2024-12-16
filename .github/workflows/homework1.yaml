@@ -6,7 +6,7 @@ on:
       - test # main 브랜치에서만 작동
 
 jobs:
-  test-job:
+  homework1:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
