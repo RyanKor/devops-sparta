@@ -10,7 +10,7 @@ jobs:
     steps:
       # 커스텀 액션 호출
       - name: Run my custom Docker build/test/push action
-        uses: ./.github/actions/custom-docker-build
+        uses: .github/actions/custom-docker-build
         with:
           # 위 action.yml에서 정의한 inputs
           image_name: "ryankor/devops-sparta"
