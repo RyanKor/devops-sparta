@@ -32,3 +32,47 @@ jobs:
         run: |
           coverage run -m pytest
           coverage report --fail-under=100
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build image
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          file: ./04-test-fastapi/Dockerfile
+          push: false
+          tags: ryankor/devops-sparta:first-cicd-complete-0.0.1
+          load: true
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+      # 여기서 로컬 컨테이너 실행 후 테스트
+      - name: Run Container
+        run: |
+          # 백그라운드로 컨테이너 실행
+          docker run -d --name test-container -p 8000:8000 ryankor/devops-sparta:first-cicd-complete-0.0.1
+          # 컨테이너가 준비될 때까지 잠시 대기(예: 5초)
+          sleep 3
+
+      - name: Push image
+        if: success()
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: ryankor/devops-sparta:first-cicd-complete-0.0.1
+
+      - name: Clean up
+        run: |
+          docker stop test-container
+          docker rm test-container
