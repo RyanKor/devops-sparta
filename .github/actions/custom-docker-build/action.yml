@@ -32,12 +32,15 @@ runs:
         password: ${{ inputs.docker_password }}     # <-- 추가로 받으려면 inputs에 정의 필요
 
     - name: Build Docker Image
-      run: |
-        docker build \
-          --build-arg SOME_VERSION=${{ inputs.image_tag }} \
-          -t ${{ inputs.image_name }}:${{ inputs.image_tag }} \
-          -f 04-test-fastapi/Dockerfile \
-          04-test-fastapi
+      uses: docker/build-push-action@v3
+      with:
+        context: 04-test-fastapi
+        file: 04-test-fastapi/Dockerfile
+        push: false
+        tags: ${{ inputs.image_name }}:${{ inputs.image_tag }}
+        load: true
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
 
     - name: Run Container Test
       run: |
