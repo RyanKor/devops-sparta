@@ -67,8 +67,8 @@ jobs:
         if: success()
         uses: docker/build-push-action@v3
         with:
-          context: ./04-test-fastapi
-          file: ./04-test-fastapi/Dockerfile
+          context: 04-test-fastapi
+          file: 04-test-fastapi/Dockerfile
           push: true
           tags: ryankor/devops-sparta:first-cicd-complete-0.0.1
 
