@@ -16,7 +16,7 @@ jobs:
       - name: 메타데이터 추출 및 출력
         run: |
           echo "=== 환경 변수 (env) 출력 ==="
-          env
+          env | grep -i github
           echo ""
           echo "=== GitHub Actions 러너 메타데이터 ==="
           echo "Runner OS: ${{ runner.os }}"
