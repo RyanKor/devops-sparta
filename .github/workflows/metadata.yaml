@@ -2,9 +2,8 @@ name: 러너 환경 메타데이터 추출
 
 on:
   push:
-    branches:
-      - main
-
+    paths:
+      - '.github/workflows/metadata.yaml'
 jobs:
   extract-metadata:
     runs-on: ubuntu-latest

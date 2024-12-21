@@ -18,7 +18,3 @@ def read_item(id: Optional[int] = Query(None, description="Item ID")):
         raise HTTPException(status_code=400, detail="Item ID is required")
     # 가상의 아이템 데이터
     return {"item_id": id, "name": "TestItem", "price": 1000}
-
-@app.get("/dummy")
-def read_dummy():
-    return {"Hello": "Sparta"}
