@@ -10,9 +10,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 RUN pip install --upgrade pip
 
-RUN pip install -r 04-test-fastapi/requirements.txt
+RUN pip install -r requirements.txt
 
-COPY 04-test-fastapi/main.py /app/main.py
+COPY main.py /app/main.py
 
 # Stage 2: Final Stage
 # 가볍고 필요한 라이브러리만 포함한 최종 이미지 생성
