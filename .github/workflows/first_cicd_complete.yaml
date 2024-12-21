@@ -55,7 +55,7 @@ jobs:
           load: true
           cache-from: type=gha
           cache-to: type=gha,mode=max
-      # 여기서 로컬 컨테이너 실행 후 테스트
+
       - name: Run Container
         run: |
           # 백그라운드로 컨테이너 실행
