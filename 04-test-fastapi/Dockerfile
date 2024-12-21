@@ -12,7 +12,7 @@ RUN pip install --upgrade pip
 
 RUN pip install -r ./requirements.txt
 
-COPY ./main.py /app/main.py
+COPY main.py /app/main.py
 
 # Stage 2: Final Stage
 # 가볍고 필요한 라이브러리만 포함한 최종 이미지 생성
