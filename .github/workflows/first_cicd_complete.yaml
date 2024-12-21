@@ -49,7 +49,7 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           context: ./04-test-fastapi
-          file: ./Dockerfile
+          file: ./04-test-fastapi/Dockerfile
           push: false
           tags: ryankor/devops-sparta:first-cicd-complete-0.0.1
           load: true
@@ -68,7 +68,7 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           context: ./04-test-fastapi
-          file: ./Dockerfile
+          file: ./04-test-fastapi/Dockerfile
           push: true
           tags: ryankor/devops-sparta:first-cicd-complete-0.0.1
 
