@@ -4,6 +4,12 @@ name: "Custom Docker Build, Test, and Push Action"
 description: "Builds a Docker image, runs tests, and pushes the image. Takes image tag and version as inputs."
 
 inputs:
+  docker_username:
+    description: "Docker User Account"
+    required: true
+  docker_password:
+    description: "Docker User Access Token"
+    required: true
   image_name:
     description: "Docker image 이름 (예: ryankor/devops-sparta)"
     required: true
@@ -31,8 +37,8 @@ runs:
     - name: Log in to Docker Hub
       uses: docker/login-action@v2
       with:
-        username: ${{ inputs.docker_username }} # 필요하다면 inputs에 추가 정의
-        password: ${{ inputs.docker_password }} # 필요하다면 inputs에 추가 정의
+        username: ${{ inputs.docker_username }} 
+        password: ${{ inputs.docker_password }}
 
     - name: Build Docker Image
       uses: docker/build-push-action@v3
