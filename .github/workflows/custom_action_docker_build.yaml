@@ -1,0 +1,21 @@
+name: 도커 커스텀 빌드 액션
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build-test-push:
+    runs-on: ubuntu-latest
+    steps:
+      # 커스텀 액션 호출
+      - name: Run my custom Docker build/test/push action
+        uses: ./.github/actions/custom-docker-build
+        with:
+          # 위 action.yml에서 정의한 inputs
+          image_name: "ryankor/devops-sparta"
+          image_tag: "first-cicd-complete-0.0.2"
+
+          만약 사용자/패스워드를 받아야 한다면(위 action.yml에서 추가했다면):
+          docker_username: ${{ secrets.DOCKER_USERNAME }}
+          docker_password: ${{ secrets.DOCKER_PASSWORD }}
