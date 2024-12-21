@@ -1,0 +1,25 @@
+name: 러너 환경 메타데이터 추출
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  extract-metadata:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout 코드 및 메타데이터 추출
+        uses: actions/checkout@v3
+
+      - name: 메타데이터 추출 및 출력
+        run: |
+          echo "=== 환경 변수 (env) 출력 ==="
+          env
+          echo ""
+          echo "=== GitHub Actions 러너 메타데이터 ==="
+          echo "Runner OS: ${{ runner.os }}"
+          echo "Runner Architecture: ${{ runner.arch }}"
+          echo "Runner Temporary Directory: ${{ runner.temp }}"
+          echo "Runner Tool Cache: ${{ runner.tool_cache }}"
