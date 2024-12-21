@@ -2,8 +2,8 @@ name: 첫번째 CI/CD 전체 파이프라인 구축
 
 on:
   push:
-    branches:
-      - main
+    paths:
+      - '.github/workflows/first_cicd_complete.yaml'
 
 jobs:
   metadata-and-code-test:
