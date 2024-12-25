@@ -1,9 +1,14 @@
 name: Nightly Build and Test
 
 on:
-  schedule:
-    - cron: '0 0 * * *' # 매일 자정에 실행
-  workflow_dispatch: # 수동 실행을 위한 트리거
+  push:
+    paths:
+      - '.github/workflows/night_build_test.yaml'
+
+  # 수업 이후 비활성화
+  # schedule:
+  #   - cron: '0 0 * * *' # 매일 자정에 실행
+  # workflow_dispatch: # 수동 실행을 위한 트리거
 
 jobs:
   metadata-and-code-test:
