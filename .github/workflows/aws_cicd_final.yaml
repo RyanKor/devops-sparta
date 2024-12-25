@@ -49,7 +49,7 @@ jobs:
           username: ubuntu                        # EC2 인스턴스의 사용자 이름 (예: ubuntu, ec2-user)
           key: ${{ secrets.EC2_SSH_KEY }}         # SSH Private Key (PEM 파일 내용)
           port: 22                                 # SSH 포트 (기본값: 22)
-          timeout: 600
+          timeout: 600s
           script: |
             set -e  # 오류 발생 시 스크립트 중단
 
