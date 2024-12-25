@@ -6,32 +6,29 @@ on:
       - '.github/workflows/aws_cicd_final.yaml'
 
 jobs:
-  # build-and-push:
-  #   name: Build and Push Docker Image
-  #   runs-on: ubuntu-latest
+  build-and-push:
+    name: Build and Push Docker Image
+    runs-on: ubuntu-latest
 
-  #   steps:
-  #     # 1. 코드 체크아웃
-  #     - name: Check out the repository
-  #       uses: actions/checkout@v3
+    steps:
+      - name: Check out the repository
+        uses: actions/checkout@v3
 
-  #     # 커스텀 액션 호출
-  #     - name: Run my custom Docker build/test/push action
-  #       uses: ./.github/actions/custom-docker-build
-  #       with:
-  #         # 위 action.yml에서 정의한 inputs
-  #         image_name: "ryankor/devops-sparta"
-  #         image_tag: "aws-cicd-final-0.0.1"
-  #         context: "04-test-fastapi"
-  #         file: "04-test-fastapi/Dockerfile"
+      - name: Run my custom Docker build/test/push action
+        uses: ./.github/actions/custom-docker-build
+        with:
+          image_name: "ryankor/devops-sparta"
+          image_tag: "aws-cicd-final-0.0.2"
+          context: "04-test-fastapi"
+          file: "04-test-fastapi/Dockerfile"
 
-  #         만약 사용자/패스워드를 받아야 한다면(위 action.yml에서 추가했다면):
-  #         docker_username: ${{ secrets.DOCKER_USERNAME }}
-  #         docker_password: ${{ secrets.DOCKER_PASSWORD }}
+          만약 사용자/패스워드를 받아야 한다면(위 action.yml에서 추가했다면):
+          docker_username: ${{ secrets.DOCKER_USERNAME }}
+          docker_password: ${{ secrets.DOCKER_PASSWORD }}
 
   deploy-to-ec2:
     name: Deploy to AWS EC2
-    # needs: build-and-push
+    needs: build-and-push
     runs-on: ubuntu-latest
 
     steps:
@@ -40,15 +37,15 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-east-1  # 해당하는 AWS 리전으로 변경
+          aws-region: us-east-1  
 
       - name: SSH into EC2 and deploy Docker container
         uses: appleboy/ssh-action@v1.2.0
         with:
-          host: ${{ secrets.EC2_HOST }}           # EC2의 Public IP 또는 DNS
-          username: ubuntu                        # EC2 인스턴스의 사용자 이름 (예: ubuntu, ec2-user)
-          key: ${{ secrets.EC2_SSH_KEY }}         # SSH Private Key (PEM 파일 내용)
-          port: 22                                 # SSH 포트 (기본값: 22)
+          host: ${{ secrets.EC2_HOST }}
+          username: ubuntu
+          key: ${{ secrets.EC2_SSH_KEY }}
+          port: 22
           timeout: 180s
           script: |
             set -e
@@ -65,7 +62,7 @@ jobs:
             fi
 
             # 이미지 풀
-            IMAGE="${{ secrets.DOCKER_USERNAME }}/devops-sparta:aws-cicd-final-0.0.1"
+            IMAGE="${{ secrets.DOCKER_USERNAME }}/devops-sparta:aws-cicd-final-0.0.2"
             echo "Pulling Docker image: $IMAGE"
             sudo docker pull "$IMAGE"
 
