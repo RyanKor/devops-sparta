@@ -54,7 +54,7 @@ jobs:
             set -e  # 오류 발생 시 스크립트 중단
 
             # 1) Docker Hub 로그인
-            echo "${{ secrets.DOCKERHUB_PASSWORD }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
+            docker login -u ${{ secrets.DOCKER_USERNAME }} -p "${{ secrets.DOCKER_PASSWORD }}"
 
             # 2) 기존 컨테이너 중단 및 제거 (존재 시)
             if [ "$(docker ps -q -f name=aws-fastapi-final)" ]; then
