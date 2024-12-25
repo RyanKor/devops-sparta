@@ -19,7 +19,7 @@ jobs:
           aws-region: us-east-1  # 해당하는 AWS 리전으로 변경
 
       - name: SSH into EC2 and deploy Docker container
-        uses: appleboy/ssh-action@v1.2.0
+        uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.EC2_HOST }}           # EC2의 Public IP 또는 DNS
           username: ubuntu                        # EC2 인스턴스의 사용자 이름 (예: ubuntu, ec2-user)
