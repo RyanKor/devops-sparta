@@ -2,7 +2,8 @@ name: 도커 커스텀 빌드 액션
 
 on:
   push:
-    branches: [ "main" ]
+    paths:
+      - '.github/workflows/custom_action_docker_build.yaml'
 
 jobs:
   build-test-push:
