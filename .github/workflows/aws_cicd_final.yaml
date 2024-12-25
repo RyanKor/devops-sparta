@@ -42,35 +42,70 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1  # 해당하는 AWS 리전으로 변경
 
-      - name: Run deployment script on EC2 via SSM
-        run: |
-          aws ssm send-command \
-            --instance-ids "${{ secrets.EC2_INSTANCE_ID }}" \
-            --document-name "AWS-RunShellScript" \
-            --comment "Deploy Docker container" \
-            --parameters '{"commands": [
-              "set -e",
-              "if ! command -v docker &> /dev/null",
-              "then",
-              "  echo \"Docker not found. Installing Docker...\"",
-              "  sudo apt-get update -y",
-              "  sudo apt-get install -y ca-certificates curl gnupg lsb-release",
-              "  sudo mkdir -p /etc/apt/keyrings",
-              "  curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg",
-              "  echo \"deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable\" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null",
-              "  sudo apt-get update -y",
-              "  sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin",
-              "  sudo usermod -aG docker $USER",
-              "  echo \"Docker installed successfully.\"",
-              "else",
-              "  echo \"Docker is already installed.\"",
-              "fi",
-              "echo \"${{ secrets.DOCKERHUB_PASSWORD }}\" | docker login -u \"${{ secrets.DOCKERHUB_USERNAME }}\" --password-stdin",
-              "if [ \"$(docker ps -q -f name=aws-fastapi-final)\" ]; then docker stop aws-fastapi-final; fi",
-              "if [ \"$(docker ps -aq -f status=exited -f name=aws-fastapi-final)\" ]; then docker rm aws-fastapi-final; fi",
-              "docker pull ${{ secrets.DOCKERHUB_USERNAME }}/devops-sparta:aws-cicd-final-0.0.1",
-              "docker run -d -p 8000:8000 --name aws-fastapi-final ${{ secrets.DOCKERHUB_USERNAME }}/devops-sparta:aws-cicd-final-0.0.1",
-              "echo \"Docker container deployed successfully.\""
-            ]}' \
-            --timeout-seconds 600 \
-            --output text
+      - name: SSH into EC2 and deploy Docker container
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.EC2_HOST }}           # EC2의 Public IP 또는 DNS
+          username: ubuntu                        # EC2 인스턴스의 사용자 이름 (예: ubuntu, ec2-user)
+          key: ${{ secrets.EC2_SSH_KEY }}         # SSH Private Key (PEM 파일 내용)
+          port: 22                                 # SSH 포트 (기본값: 22)
+          timeout: 600
+          script: |
+            set -e  # 오류 발생 시 스크립트 중단
+
+            # 1) Docker 설치 여부 확인
+            if ! command -v docker &> /dev/null
+            then
+              echo "Docker not found. Installing Docker..."
+
+              # 업데이트 및 필수 패키지 설치
+              sudo apt-get update -y
+              sudo apt-get install -y \
+                ca-certificates \
+                curl \
+                gnupg \
+                lsb-release
+
+              # Docker 공식 GPG 키 추가
+              sudo mkdir -p /etc/apt/keyrings
+              curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+
+              # Docker 저장소 설정
+              echo \
+                "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+                $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+              # Docker Engine 설치
+              sudo apt-get update -y
+              sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+
+              # 현재 사용자를 docker 그룹에 추가 (필요 시)
+              sudo usermod -aG docker $USER
+
+              echo "Docker installed successfully."
+            else
+              echo "Docker is already installed."
+            fi
+
+            # 2) Docker Hub 로그인
+            echo "${{ secrets.DOCKERHUB_PASSWORD }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
+
+            # 3) 기존 컨테이너 중단 및 제거 (존재 시)
+            if [ "$(docker ps -q -f name=aws-fastapi-final)" ]; then
+              docker stop aws-fastapi-final
+            fi
+
+            if [ "$(docker ps -aq -f status=exited -f name=aws-fastapi-final)" ]; then
+              docker rm aws-fastapi-final
+            fi
+
+            # 4) 최신 이미지 Pull
+            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/devops-sparta:aws-cicd-final-0.0.1
+
+            # 5) 컨테이너 실행
+            docker run -d \
+              -p 8000:8000 \
+              --name aws-fastapi-final \
+              ${{ secrets.DOCKERHUB_USERNAME }}/devops-sparta:aws-cicd-final-0.0.1
+
+            echo "Docker container deployed successfully."
