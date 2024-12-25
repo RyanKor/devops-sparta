@@ -32,12 +32,19 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # - name: Configure AWS Credentials
-      #   uses: aws-actions/configure-aws-credentials@v2
-      #   with:
-      #     aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      #     aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      #     aws-region: us-east-1  
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1  
+
+      - name: Check AWS CLI version
+        run: aws --version
+
+      - name: Check EC2 Instances Status
+        run: |
+          aws ec2 describe-instances --query 'Reservations[*].Instances[*].{Name: Tags[?Key==`Name`].Value | [0], State: State.Name}' --output table
 
       - name: SSH into EC2 and deploy Docker container
         uses: appleboy/ssh-action@v1.2.0
