@@ -65,7 +65,7 @@ jobs:
             fi
 
             # 이미지 풀
-            IMAGE="${{ secrets.DOCKERHUB_USERNAME }}/devops-sparta:aws-cicd-final-0.0.1"
+            IMAGE="${{ secrets.DOCKER_USERNAME }}/devops-sparta:aws-cicd-final-0.0.1"
             echo "Pulling Docker image: $IMAGE"
             sudo docker pull "$IMAGE"
 
