@@ -6,28 +6,28 @@ on:
       - '.github/workflows/aws_cicd_final.yaml'
 
 jobs:
-  # build-and-push:
-  #   name: Build and Push Docker Image
-  #   runs-on: ubuntu-latest
+  build-and-push:
+    name: Build and Push Docker Image
+    runs-on: ubuntu-latest
 
-  #   steps:
-  #     # 1. 코드 체크아웃
-  #     - name: Check out the repository
-  #       uses: actions/checkout@v3
+    steps:
+      # 1. 코드 체크아웃
+      - name: Check out the repository
+        uses: actions/checkout@v3
 
-  #     # 커스텀 액션 호출
-  #     - name: Run my custom Docker build/test/push action
-  #       uses: ./.github/actions/custom-docker-build
-  #       with:
-  #         # 위 action.yml에서 정의한 inputs
-  #         image_name: "ryankor/devops-sparta"
-  #         image_tag: "aws-cicd-final-0.0.1"
-  #         context: "04-test-fastapi"
-  #         file: "04-test-fastapi/Dockerfile"
+      # 커스텀 액션 호출
+      - name: Run my custom Docker build/test/push action
+        uses: ./.github/actions/custom-docker-build
+        with:
+          # 위 action.yml에서 정의한 inputs
+          image_name: "ryankor/devops-sparta"
+          image_tag: "aws-cicd-final-0.0.1"
+          context: "04-test-fastapi"
+          file: "04-test-fastapi/Dockerfile"
 
-  #         만약 사용자/패스워드를 받아야 한다면(위 action.yml에서 추가했다면):
-  #         docker_username: ${{ secrets.DOCKER_USERNAME }}
-  #         docker_password: ${{ secrets.DOCKER_PASSWORD }}
+          만약 사용자/패스워드를 받아야 한다면(위 action.yml에서 추가했다면):
+          docker_username: ${{ secrets.DOCKER_USERNAME }}
+          docker_password: ${{ secrets.DOCKER_PASSWORD }}
 
   deploy-to-ec2:
     name: Deploy to AWS EC2
