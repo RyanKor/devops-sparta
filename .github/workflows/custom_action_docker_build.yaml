@@ -14,7 +14,7 @@ jobs:
         uses: actions/checkout@v3
       # 커스텀 액션 호출
       - name: Run my custom Docker build/test/push action
-        uses: sparta-action-builder@v1 #./.github/actions/custom-docker-build
+        uses: ryankor/sparta-action-builder@v1 #./.github/actions/custom-docker-build
         with:
           # 위 action.yml에서 정의한 inputs
           image_name: "ryankor/devops-sparta"
