@@ -9,6 +9,11 @@ jobs:
   homework2:
     runs-on: ubuntu-latest
     steps:
+    
+      - name: Force Error
+        run: |
+          echo "이 스텝은 일부로 에러를 발생시킵니다."
+          exit 1
 
       - name: action-slack
         uses: 8398a7/action-slack@v3
@@ -17,4 +22,4 @@ jobs:
           fields: repo,message,commit,author,action,eventName,ref,workflow,job,took,pullRequest # selectable (default: repo,message)
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }} # required
-        if: always() # Pick up events even if the job fails or is canceled.
+        if: failure() # Pick up events even if the job fails or is canceled.
