@@ -80,11 +80,11 @@
 
 - Workflow Run 실행을 위한 첫번째 파이프라인 YAML: [링크](https://github.com/RyanKor/devops-sparta/blob/main/.github/workflows/first_coverage_pipeline.yaml)
 
-- Workflow Run 실행을 위한 첫번째 파이프라인 (First Coverage Pipeline): [링크](https://github.com/RyanKor/devops-sparta/actions/workflows/first_coverage_pipeline.yaml)
+- Workflow Run 실행을 위한 첫번째 파이프라인 Action (First Coverage Pipeline): [링크](https://github.com/RyanKor/devops-sparta/actions/workflows/first_coverage_pipeline.yaml)
 
 - Workflow Run 실행을 위한 두번째 파이프라인 YAML: [링크](https://github.com/RyanKor/devops-sparta/blob/main/.github/workflows/second_build_pipeline.yaml)
 
-- Workflow Run 실행을 위한 두번째 파이프라인 (Second Build Pipeline): [링크](https://github.com/RyanKor/devops-sparta/actions/workflows/second_build_pipeline.yaml)
+- Workflow Run 실행을 위한 두번째 파이프라인 Action (Second Build Pipeline): [링크](https://github.com/RyanKor/devops-sparta/actions/workflows/second_build_pipeline.yaml)
 
 #### 3.3 테스트 결과 분석 및 개선
 
