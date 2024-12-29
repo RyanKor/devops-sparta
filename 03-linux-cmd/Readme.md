@@ -32,3 +32,11 @@ rm dummy.txt
 cp requirements.txt 03-linux-cmd/
 mkdir -p test_mkdir
 ```
+
+## 3. 쉘스크립트 실행 방법
+
+```
+chmod +x linux_cmd.sh
+
+./linux_cmd.sh
+```
